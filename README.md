@@ -1,7 +1,7 @@
 # DCS Vagrant & Docker Images 
 
 ## Quickstart
-* First, create some shared directories on your local filesystem.  [Edit `DockerHostVagrantfile`](#editing-dockerhostvagrantfile`) if you wish to stray from the defaults:
+* First, create some shared directories on your local filesystem.  [Edit `DockerHostVagrantfile`](#editing-dockerhostvagrantfile) if you wish to stray from the defaults:
 	* A directory for packages (default `/shared/package-ingest`).  
 		* Subdirectories of this can be used for package deposit or failed packages.  
 		* When the package ingest service starts, it will create subdirectories `packages` and `fail-packages`.  Placing packages into `packages` will ingest into the Fedora root container.
