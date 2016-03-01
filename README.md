@@ -36,24 +36,20 @@ If you want to use different paths other than those above, open `DockerHostVagra
 
 The left and right parameters to `config.vm.synced_folder` govern where these directories reside on the local and remote (virtual machine) file systems respectively.  If you wanted to keep everything under a specific user's home directory, for example, you could replace the left parameters with `/home/esm/packageingestservice-runtime/package-dir`, `/home/esm/packageingestservice-runtime/karaf`, and `/home/esm/packageingestservice-runtime/jetty`:
 
->    # Local folders for packages and karaf config
-
->  config.vm.synced_folder "/home/esm/packageingestservice-runtime/package-dir", "/shared/package-ingest",
-
->     mount_options: ["dmode=777", "fmode=666"]
-
->  config.vm.synced_folder "/home/esm/packageingestservice-runtime/karaf", "/shared/karaf",
-
->     mount_options: ["dmode=777", "fmode=666"]
-
->  config.vm.synced_folder "/home/esm/packageingestservice-runtime/jetty", "/shared/jetty",
-
->     mount_options: ["dmode=777", "fmode=666"]
+<pre>
+    # Local folders for packages and karaf config
+  config.vm.synced_folder "/home/esm/packageingestservice-runtime/package-dir", "/shared/package-ingest",
+     mount_options: ["dmode=777", "fmode=666"]
+  config.vm.synced_folder "/home/esm/packageingestservice-runtime/karaf", "/shared/karaf",
+     mount_options: ["dmode=777", "fmode=666"]
+  config.vm.synced_folder "/home/esm/packageingestservice-runtime/jetty", "/shared/jetty",
+     mount_options: ["dmode=777", "fmode=666"]
+</pre>
 
 
-_You need to create these directories yourself_
+*_You need to create these directories yourself_*
 
-_Do not change the right parameters_
+*_Do not change the right parameters_*
 
 After verifying that the services are up and running (see below), you should be able to deposit a new package by cpoying it to `/home/esm/packageingestservice-runtime/package-dir/packages`, and see log files appear in `/home/esm/packageingestservice-runtime/jetty/logs` and `/home/esm/packageingestservice-runtime/karaf/log`.
 
