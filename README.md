@@ -1,7 +1,7 @@
 # DCS Vagrant & Docker Images 
 
 ## Quickstart
-* First, create some shared directories on your local filesystem.  Edit `DockerHostVagrantfile` if you wish to stray from the defaults:
+* First, create some shared directories on your local filesystem.  [Edit `DockerHostVagrantfile`](#editing-dockerhostvagrantfile`) if you wish to stray from the defaults:
 	* A directory for packages (default `/shared/package-ingest`).  
 		* Subdirectories of this can be used for package deposit or failed packages.  
 		* When the package ingest service starts, it will create subdirectories `packages` and `fail-packages`.  Placing packages into `packages` will ingest into the Fedora root container.
@@ -13,45 +13,6 @@
 * Next, in the project directory (the one containing `Vagrantfile`), run `vagrant up`
 	* If you failed to create one of the above directories, Vagrant will yell at you and refuse to start.
 	* You'll see lots of text fly by as it launches a VM, builds a docker image, and starts.  This can take several minutes.
-
-### Editing `DockerHostVagrantfile`
-By default the following directories on your local filesystem are shared with the DCS Vagrant and Docker images
-* `/shared/package-ingest`: Subdirectories of this directory are where you'll place packages for deposit and where failed packages will appear.
-* `/shared/jetty`: This directory will contain the logs for the Fedora instance that your packages are deposited to.
-* `/shared/karaf`: This directory will contain the logs for the Karaf instance that runs the Package Ingest Service.
-
-_Shared_ means that the contents of these directories can be read from or written to by your local operating system _and_ the DCS Vagrant and Docker images.  As the virtual machines update content in these directories, you can see the updates (e.g. `tail -f /shared/karaf/log/karaf.log`).  Likewise the virtual machines can see the content you place in these shared directories (e.g. `cp my-package.tar.gz /shared/package-ingest/packages`).
-
-If you want to use different paths other than those above, open `DockerHostVagrantfile` and edit the section:
-
-<pre>
-  # Local folders for packages and karaf config
-  config.vm.synced_folder "/shared/package-ingest", "/shared/package-ingest",
-     mount_options: ["dmode=777", "fmode=666"]
-  config.vm.synced_folder "/shared/karaf", "/shared/karaf",
-     mount_options: ["dmode=777", "fmode=666"]
-  config.vm.synced_folder "/shared/jetty", "/shared/jetty",
-     mount_options: ["dmode=777", "fmode=666"]
-</pre>
-
-The left and right parameters to `config.vm.synced_folder` govern where these directories reside on the local and remote (virtual machine) file systems respectively.  If you wanted to keep everything under a specific user's home directory, for example, you could replace the left parameters with `/home/esm/packageingestservice-runtime/package-dir`, `/home/esm/packageingestservice-runtime/karaf`, and `/home/esm/packageingestservice-runtime/jetty`:
-
-<pre>
-    # Local folders for packages and karaf config
-  config.vm.synced_folder "/home/esm/packageingestservice-runtime/package-dir", "/shared/package-ingest",
-     mount_options: ["dmode=777", "fmode=666"]
-  config.vm.synced_folder "/home/esm/packageingestservice-runtime/karaf", "/shared/karaf",
-     mount_options: ["dmode=777", "fmode=666"]
-  config.vm.synced_folder "/home/esm/packageingestservice-runtime/jetty", "/shared/jetty",
-     mount_options: ["dmode=777", "fmode=666"]
-</pre>
-
-
-*_You need to create these directories yourself_*
-
-*_Do not change the right parameters_*
-
-After verifying that the services are up and running (see below), you should be able to deposit a new package by cpoying it to `/home/esm/packageingestservice-runtime/package-dir/packages`, and see log files appear in `/home/esm/packageingestservice-runtime/jetty/logs` and `/home/esm/packageingestservice-runtime/karaf/log`.
 
 ## Verification
 * Point your browser to [http://localhost:8181/system/console/components](http://localhost:8181/system/console/components).
@@ -111,3 +72,42 @@ package.poll.interval.ms = 1000
 ` where CONTAINER-URI is a URI of a Fedora container (e.g. from a notification e-mail), PATH-TO-PACKAGE-DIR is the relative path to an package deposit dir.  
 			 - Important:  The deposit and fail dirs are filesystem paths _on the docker container_ and therefore always start with `/shared/package-ingest`, regardless of where the file is on your local machine.  So if you have your shared package-ingest directory at `c:\Users\Me\Vagrant\packageDepositShared\` and created a package deposit directory of `c:\Users\Me\Vagrant\packageDepositShared\collection1\toDeposit`, you would specify in the configuration file `package.deposit.dir = /shared/package-ingest/collection1/toDeposit`
 				 - The `package.poll.interval.ms` is optional.  Default is 30 seconds (30000) if unspecified.
+
+## Editing `DockerHostVagrantfile`
+By default the following directories on your local filesystem are shared with the DCS Vagrant and Docker images
+* `/shared/package-ingest`: Subdirectories of this directory are where you'll place packages for deposit and where failed packages will appear.
+* `/shared/jetty`: This directory will contain the logs for the Fedora instance that your packages are deposited to.
+* `/shared/karaf`: This directory will contain the logs for the Karaf instance that runs the Package Ingest Service.
+
+_Shared_ means that the contents of these directories can be read from or written to by your local operating system _and_ the DCS Vagrant and Docker images.  As the virtual machines update content in these directories, you can see the updates (e.g. `tail -f /shared/karaf/log/karaf.log`).  Likewise the virtual machines can see the content you place in these shared directories (e.g. `cp my-package.tar.gz /shared/package-ingest/packages`).
+
+If you want to use different paths other than those above, open `DockerHostVagrantfile` and edit the section:
+
+<pre>
+  # Local folders for packages and karaf config
+  config.vm.synced_folder "/shared/package-ingest", "/shared/package-ingest",
+     mount_options: ["dmode=777", "fmode=666"]
+  config.vm.synced_folder "/shared/karaf", "/shared/karaf",
+     mount_options: ["dmode=777", "fmode=666"]
+  config.vm.synced_folder "/shared/jetty", "/shared/jetty",
+     mount_options: ["dmode=777", "fmode=666"]
+</pre>
+
+The left and right parameters to `config.vm.synced_folder` govern where these directories reside on the local and remote (virtual machine) file systems respectively.  If you wanted to keep everything under a specific user's home directory, for example, you could replace the left parameters with `/home/esm/packageingestservice-runtime/package-dir`, `/home/esm/packageingestservice-runtime/karaf`, and `/home/esm/packageingestservice-runtime/jetty`:
+
+<pre>
+    # Local folders for packages and karaf config
+  config.vm.synced_folder "/home/esm/packageingestservice-runtime/package-dir", "/shared/package-ingest",
+     mount_options: ["dmode=777", "fmode=666"]
+  config.vm.synced_folder "/home/esm/packageingestservice-runtime/karaf", "/shared/karaf",
+     mount_options: ["dmode=777", "fmode=666"]
+  config.vm.synced_folder "/home/esm/packageingestservice-runtime/jetty", "/shared/jetty",
+     mount_options: ["dmode=777", "fmode=666"]
+</pre>
+
+
+*_You need to create these directories yourself_*
+
+*_Do not change the right parameters_*
+
+After verifying that the services are up and running (see below), you should be able to deposit a new package by copying it to `/home/esm/packageingestservice-runtime/package-dir/packages`, and see log files appear in `/home/esm/packageingestservice-runtime/jetty/logs` and `/home/esm/packageingestservice-runtime/karaf/log`.
