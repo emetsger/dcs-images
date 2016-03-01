@@ -4,7 +4,7 @@ MAINTAINER Data Conservancy <dc-ird@googlegroups.com>
 
 #####################
 #Basic setup: Install java, make shared dirs, 
-RUN apk add --update openjdk8-jre && rm -rf /var/cache/apk/* 
+RUN apk add --update openjdk8-jre && apk add --update curl && rm -rf /var/cache/apk/* 
 
 ENV SHARED=/shared \
     APPS=/opt \
@@ -23,7 +23,7 @@ ENV JETTY_HOME=${APPS}/jetty \
 # Create simplified startup script
 RUN export JETTY_VERSION=9.3.7.v20160115 && \
     mkdir -p ${APPS} && \
-    wget http://download.eclipse.org/jetty/stable-9/dist/jetty-distribution-${JETTY_VERSION}.tar.gz -O - | tar xzf - -C ${APPS} && \
+    curl -L http://download.eclipse.org/jetty/stable-9/dist/jetty-distribution-${JETTY_VERSION}.tar.gz | tar xzf - -C ${APPS} && \
     ln -s ${APPS}/jetty-distribution-${JETTY_VERSION} ${JETTY_HOME} && \
     mkdir -p ${JETTY_SHARED}/logs && \
     echo "--module=logging" >> ${JETTY_HOME}/start.ini && \
@@ -35,7 +35,7 @@ RUN export JETTY_VERSION=9.3.7.v20160115 && \
 #Download & Deploy Fedora 4.5.0.  
 #Modify jetty's start.ini to provide fedora home system property
 RUN export FEDORA_VERSION=4.5.0 && \
-    wget https://github.com/fcrepo4/fcrepo4/releases/download/fcrepo-${FEDORA_VERSION}/fcrepo-webapp-${FEDORA_VERSION}.war -O - \
+    curl -L https://github.com/fcrepo4/fcrepo4/releases/download/fcrepo-${FEDORA_VERSION}/fcrepo-webapp-${FEDORA_VERSION}.war \
         > ${JETTY_DEPLOY_DIR}/fcrepo.war && \
     echo "-Dfcrepo.home=${SHARED}/fedora-data" >> ${JETTY_HOME}/start.ini
 
@@ -52,7 +52,7 @@ ENV KARAF_HOME=${APPS}/apache-karaf  \
 # Change permissions so Karaf can be run by any unprivileged user
 RUN export KARAF_VERSION=4.0.4 && \
     mkdir -p ${APPS} && \
-    wget http://apache.mirrors.lucidnetworks.net/karaf/${KARAF_VERSION}/apache-karaf-${KARAF_VERSION}.tar.gz -O - | tar xzf - -C ${APPS} && \
+    curl -L http://apache.mirrors.lucidnetworks.net/karaf/${KARAF_VERSION}/apache-karaf-${KARAF_VERSION}.tar.gz | tar xzf - -C ${APPS} && \
     ln -s ${APPS}/apache-karaf-${KARAF_VERSION} ${KARAF_HOME} && \ 
     cat ${KARAF_HOME}/etc/org.ops4j.pax.url.mvn.cfg \
         | sed 's/org.ops4j.pax.url.mvn.repositories=/org.ops4j.pax.url.mvn.repositories = http:\/\/maven.dataconservancy.org\/public\/releases@id=dc.public.releases,http:\/\/maven.dataconservancy.org\/public\/snapshots@id=dc.public.snapshots@snapshots@noreleases,/' \
