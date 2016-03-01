@@ -24,6 +24,7 @@ _Shared_ means that the contents of these directories can be read from or writte
 
 If you want to use different paths other than those above, open `DockerHostVagrantfile` and edit the section:
 
+<pre>
   # Local folders for packages and karaf config
   config.vm.synced_folder "/shared/package-ingest", "/shared/package-ingest",
      mount_options: ["dmode=777", "fmode=666"]
@@ -31,6 +32,7 @@ If you want to use different paths other than those above, open `DockerHostVagra
      mount_options: ["dmode=777", "fmode=666"]
   config.vm.synced_folder "/shared/jetty", "/shared/jetty",
      mount_options: ["dmode=777", "fmode=666"]
+</pre>
 
 The left and right parameters to `config.vm.synced_folder` govern where these directories reside on the local and remote (virtual machine) file systems respectively.  If you wanted to keep everything under a specific user's home directory, for example, you could replace the left parameters with `/home/esm/packageingestservice-runtime/package-dir`, `/home/esm/packageingestservice-runtime/karaf`, and `/home/esm/packageingestservice-runtime/jetty`:
 
