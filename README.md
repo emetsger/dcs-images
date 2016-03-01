@@ -111,3 +111,11 @@ The left and right parameters to `config.vm.synced_folder` govern where these di
 *_Do not change the right-hand parameters_*
 
 After verifying that the services are up and running, you should be able to deposit a new package by copying it to `/home/esm/packageingestservice-runtime/package-dir/packages`, and see log files appear in `/home/esm/packageingestservice-runtime/jetty/logs` and `/home/esm/packageingestservice-runtime/karaf/log`.
+
+## MacOS users
+
+After downloading and installing Vagrant and Virtualbox, you should be able to continue with the [Quickstart](#quickstart)
+
+* [Download](https://www.vagrantup.com/downloads.html) and install Vagrant (tested on version 1.8.1)
+* [Download](https://www.virtualbox.org/wiki/Downloads) and install VirtualBox (tested on version 5.0.14 for OS X hosts, amd64; _not_ the extension pack)
+* Continue the installation by following the [Quickstart](#quickstart)
