@@ -1,0 +1,34 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.require_version ">= 1.6.0"
+
+Vagrant.configure("2") do |config|
+
+  # Install docker on host VM
+  config.vm.provision "docker"
+
+  # Kill SSH so Vagrant reconnects and has Docker commands on $PATH
+  config.vm.provision "shell", inline:
+    "ps aux | grep 'sshd:' | awk '{print $2}' | xargs kill"
+
+    # Local folders for packages and karaf config
+  config.vm.synced_folder "/shared/package-ingest", "/shared/package-ingest",
+     mount_options: ["dmode=777", "fmode=666"]
+  config.vm.synced_folder "/shared/karaf", "/shared/karaf",
+     mount_options: ["dmode=777", "fmode=666"]
+  config.vm.synced_folder "/shared/jetty", "/shared/jetty",
+     mount_options: ["dmode=777", "fmode=666"]
+
+
+  config.vm.define "dockerhost"
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.network "forwarded_port",
+    guest: 8080, host: 8080
+  config.vm.network "forwarded_port",
+    guest: 8181, host: 8181
+
+  config.vm.provider :virtualbox do |vb|
+      vb.memory = 2048
+      vb.name = "dockerhost"
+  end
+end
