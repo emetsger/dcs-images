@@ -108,6 +108,6 @@ The left and right parameters to `config.vm.synced_folder` govern where these di
 
 *_You need to create these directories yourself_*
 
-*_Do not change the right parameters_*
+*_Do not change the right-hand parameters_*
 
-After verifying that the services are up and running (see below), you should be able to deposit a new package by copying it to `/home/esm/packageingestservice-runtime/package-dir/packages`, and see log files appear in `/home/esm/packageingestservice-runtime/jetty/logs` and `/home/esm/packageingestservice-runtime/karaf/log`.
+After verifying that the services are up and running, you should be able to deposit a new package by copying it to `/home/esm/packageingestservice-runtime/package-dir/packages`, and see log files appear in `/home/esm/packageingestservice-runtime/jetty/logs` and `/home/esm/packageingestservice-runtime/karaf/log`.
