@@ -21,9 +21,9 @@
 * point your browser to Fedora at [http://localhost:8080/fcrepo/rest](http://localhost:8080/fcrepo/rest)
 	* You should see an empty root container
 * Drop some packages into the deposit dir(s) and watch them ingest
-			* The default deposit dir, which ingests into Fedora's root directory is `/shared/package-ingest/packages` (or simply the `packages` subdirectory if you specified a non-default package ingest folder).
+	* The default deposit dir, which ingests into Fedora's root directory is `/shared/package-ingest/packages` (or simply the `packages` subdirectory if you specified a non-default package ingest folder).
 	* The service is configured to wait 30 seconds before ingesting a package
-		* You can change this by going into [OSGI-> components](http://localhost:8181/system/console/components) menu of the webconsole, clicking on the wrench icon by the by PackageFileDepositWorkflow service, and editing the value of the package poll interval, in milliseconds.  Default is 30000 (30 seconds).  Click 'save', and the changes will be in effect immediately
+	* You can change this by going into [OSGI-> components](http://localhost:8181/system/console/components) menu of the webconsole, clicking on the wrench icon by the by PackageFileDepositWorkflow service, and editing the value of the package poll interval, in milliseconds.  Default is 30000 (30 seconds).  Click 'save', and the changes will be in effect immediately
 	* You may wish to set up e-mail notifications (see below)
 * Once a package has been processed, it will disappear from the deposit directory.  If it has failed, it will appear in the package fail directory.  Otherwise, it's in Fedora!
 
@@ -42,12 +42,12 @@ This method of storing configuration is persistent within a single container ins
 ### Via configuration files
 This method of storing configuration is persistent across containers - you can completely erase a container, create a new one, point it to the config, and it should work as configured.
 * Create a `/shared/karaf/deploy` directory (This assumes you kept the default karaf dir of `/shared/karaf`.  If not, just create a `deploy` subdirectory of wherever the shared karaf directory happens to be).
-	* Create a file in the deploy directory named `org.dataconservancy.packaging.ingest.camel.impl.EmailNotifications.cfg` with the following contents
+    * Create a file in the deploy directory named `org.dataconservancy.packaging.ingest.camel.impl.EmailNotifications.cfg` with the following contents
 		* mail.smtpHost = YOUR_SMTP_SERVER (e.g. smtp.gmail.com)
-mail.smtpUser = YOUR_EMAIL
-mail.smtpPass = YOUR_PASSWORD
-mail.from = FROM_ADDRESS
-mail.to = TO_ADDRESS
+        * mail.smtpUser = YOUR_EMAIL
+        * mail.smtpPass = YOUR_PASSWORD
+        * mail.from = FROM_ADDRESS
+        * mail.to = TO_ADDRESS
 * Create a file in the deploy directory named `org.dataconservancy.packaging.ingest.camel.impl.LoggerNotifications.cfg` with the following contents
 	* `service.ranking = -2`
 		* This explicitly disables/de-prioritizes the default logging notification.  Ideally, this step wouldn't be necessary, but testing has revealed that the notification implementation won't be swapped out until this happens.
@@ -65,10 +65,10 @@ This method of storing configuration is persistent across containers - you can c
  - Create a text file in the `deploy` directory named `org.dataconservancy.packaging.ingest.camel.impl.PackageFileDepositWorkflow-myPackages.cfg`.  
 	 - The part after the dash, `-myPackages.cfg` has to be unique for each workflow, and should be an informative name, like `-ELOKAProject.cfg` or `-cowImagesCollection.cfg`.   
 	 - Populate the config file with the following content
-		 - `deposit.location = http://CONTAINER-URI
-package.deposit.dir = /shared/package-ingest/PATH-TO-PACKAGE_DIR
-package.fail.dir = /shared/package-ingest/failed-packages
-package.poll.interval.ms = 1000
+		- `deposit.location = http://CONTAINER-URI
+        - package.deposit.dir = /shared/package-ingest/PATH-TO-PACKAGE_DIR
+        - package.fail.dir = /shared/package-ingest/failed-packages
+        - package.poll.interval.ms = 1000
 ` where CONTAINER-URI is a URI of a Fedora container (e.g. from a notification e-mail), PATH-TO-PACKAGE-DIR is the relative path to an package deposit dir.  
 			 - Important:  The deposit and fail dirs are filesystem paths _on the docker container_ and therefore always start with `/shared/package-ingest`, regardless of where the file is on your local machine.  So if you have your shared package-ingest directory at `c:\Users\Me\Vagrant\packageDepositShared\` and created a package deposit directory of `c:\Users\Me\Vagrant\packageDepositShared\collection1\toDeposit`, you would specify in the configuration file `package.deposit.dir = /shared/package-ingest/collection1/toDeposit`
 				 - The `package.poll.interval.ms` is optional.  Default is 30 seconds (30000) if unspecified.
