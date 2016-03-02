@@ -1,5 +1,7 @@
 # DCS Vagrant & Docker Images 
 
+This document is for setting up Vagrant and Docker images. For more documentation on how to use the system once it's up, see  [User Documentation](USERDOC.md)
+
 ## Quickstart
 * First, create some shared directories on your local filesystem.  [Edit `DockerHostVagrantfile`](#editing-dockerhostvagrantfile) if you wish to stray from the defaults:
 	* A directory for packages (default `/shared/package-ingest`).  
