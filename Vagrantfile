@@ -18,8 +18,8 @@ Vagrant.configure("2") do |config|
       d.ports = ["8080:8080", "8181:8181"]
       d.remains_running = true
 
-      # Is there some way to avoid running as root?  This doesn't seem to work..
-      #d.create_args = ["--user=#{Process.uid}"]
+      # By default, this runs as the vagrant user
+      d.create_args = ["--user=1000:1000"]
 
       # Comment out 'force' for direct docker on Linux
       d.force_host_vm = true

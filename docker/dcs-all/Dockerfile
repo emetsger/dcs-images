@@ -3,8 +3,8 @@ FROM alpine:3.3
 MAINTAINER Data Conservancy <dc-ird@googlegroups.com>
 
 #####################
-#Basic setup: Install java, make shared dirs, 
-RUN apk add --update openjdk8-jre && apk add --update curl && rm -rf /var/cache/apk/* 
+#Basic setup: Install java, curl, bash (required for jetty startup scripts)
+RUN apk add --update openjdk8-jre && apk add --update curl && apk add --update bash && rm -rf /var/cache/apk/* && mkdir /shared && chmod a+rwx /shared
 
 ENV SHARED=/shared \
     APPS=/opt \
@@ -25,7 +25,6 @@ RUN export JETTY_VERSION=9.3.7.v20160115 && \
     mkdir -p ${APPS} && \
     curl -L http://download.eclipse.org/jetty/stable-9/dist/jetty-distribution-${JETTY_VERSION}.tar.gz | tar xzf - -C ${APPS} && \
     ln -s ${APPS}/jetty-distribution-${JETTY_VERSION} ${JETTY_HOME} && \
-    mkdir -p ${JETTY_SHARED}/logs && \
     echo "--module=logging" >> ${JETTY_HOME}/start.ini && \
     printf "#!/bin/sh\nmkdir -p ${JETTY_SHARED}/logs\njava -Djetty.home=${JETTY_HOME} -Djetty.base=${JETTY_HOME} -Djetty.logging.dir=${JETTY_SHARED}/logs -jar ${JETTY_HOME}/start.jar" \
         > ${JETTY_HOME}/bin/jetty_dcs.sh && \
@@ -67,7 +66,8 @@ RUN export KARAF_VERSION=4.0.4 && \
     echo "feature:install webconsole " \
         | ${KARAF_HOME}/bin/client -u karaf -b -r 10 &&  \
     ${KARAF_HOME}/bin/stop && \  
-    chmod a+rw -R ${KARAF_HOME}/data ${KARAF_HOME}/instances  ${KARAF_HOME}/lock
+    chmod a+rw -R ${KARAF_HOME}/data ${KARAF_HOME}/etc ${KARAF_HOME}/instances ${KARAF_HOME}/lock && \
+    rm -rf ${KARAF_SHARED}
     
     
 #####################
@@ -77,7 +77,8 @@ RUN export PIS_VERSION=LATEST && \
     echo "feature:repo-add mvn:org.dataconservancy.packaging/package-ingest-karaf/${PIS_VERSION}/xml/features; " \
         "feature:install package-ingest-karaf" \
         | ${KARAF_HOME}/bin/client -u karaf -b -r 10 &&  \
-    ${KARAF_HOME}/bin/stop
+    ${KARAF_HOME}/bin/stop && \
+    rm -rf ${KARAF_SHARED}
     
 #################################### 
 # Package ingest default configuration
@@ -88,7 +89,8 @@ RUN echo "package.extract.dir = /tmp" > ${KARAF_HOME}/etc/org.dataconservancy.pa
     export FILE=${KARAF_HOME}/etc/org.dataconservancy.packaging.ingest.camel.impl.PackageFileDepositWorkflow-root.cfg && \
     echo 'deposit.location = ${fedora.baseURI}' >> ${FILE} && \ 
     echo 'package.deposit.dir = ${deposit.dir.root}' >> ${FILE} && \ 
-    echo 'package.fail.dir = ${deposit.dir.root.fail}' >> ${FILE} 
+    echo 'package.fail.dir = ${deposit.dir.root.fail}' >> ${FILE} && \
+    chmod a+rw ${KARAF_HOME}/etc
     
 ##############################
 # A script to start both karaf and jetty

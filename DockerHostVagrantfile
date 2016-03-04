@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
     "ps aux | grep 'sshd:' | awk '{print $2}' | xargs kill"
 
   config.vm.provision "shell", inline:
-    "sudo mkdir -p /shared"
+    "sudo mkdir -p /shared; sudo chown vagrant:vagrant /shared; sudo chmod g+rws /shared"
 
   
   ############ Networking ############
@@ -49,12 +49,12 @@ Vagrant.configure("2") do |config|
   # singly here, but NOT fedora-data.  NFS does not have this limitation,
   # so on hosts that support NFS (Linux, Mac), you may want to use an
   # alternate configuration based on NFS (see below)
-  config.vm.synced_folder "/shared/package-ingest", "/shared/package-ingest",
-     mount_options: ["dmode=777", "fmode=666"]
-  config.vm.synced_folder "/shared/karaf", "/shared/karaf",
-     mount_options: ["dmode=777", "fmode=666"]
-  config.vm.synced_folder "/shared/jetty", "/shared/jetty",
-     mount_options: ["dmode=777", "fmode=666"]
+  #config.vm.synced_folder "/shared/package-ingest", "/shared/package-ingest",
+  #   mount_options: ["dmode=777", "fmode=666"]
+  #config.vm.synced_folder "/shared/karaf", "/shared/karaf",
+  #   mount_options: ["dmode=777", "fmode=666"]
+  #config.vm.synced_folder "/shared/jetty", "/shared/jetty",
+  #   mount_options: ["dmode=777", "fmode=666"]
 
 
   # NFS or SMB shared folders
