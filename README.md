@@ -22,7 +22,7 @@ section.
 	  This can take several minutes.
 * In order to share files with the VM (e.g. to deposit packages, read log files, update configuration), you need to 
   mount a network share provided by the VM.  This is accessible at `\\10.11.8.11\shared`.  
-* When you are finiished, type `vagrant halt`.  Type `vagrant up` at any time to re-launch the docker images, with your
+* When you are finished, type `vagrant halt`.  Type `vagrant up` at any time to re-launch the docker images, with your
   data intact.
 
 ## Verification
