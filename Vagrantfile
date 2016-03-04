@@ -7,6 +7,9 @@ ENV['VAGRANT_DEFAULT_PROVIDER'] = 'docker'
  
 Vagrant.configure("2") do |config|
 
+  # Do not share the current directory as /vagrant with Docker
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
   config.vm.define "dcs-container" do |m|
  
     m.vm.provider :docker do |d|
