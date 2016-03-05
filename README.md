@@ -2,6 +2,15 @@
 
 This document is for setting up Vagrant and Docker images. For more documentation on how to use the system once it's up, see  [User Documentation](USERDOC.md)
 
+
+## Prerequisites 
+
+The below instruction assumes you have downloaded and installed Vagrant and Virtualbox. If not, please download and install Vagrant and Virtualbox before attempting the [Quickstart](#quickstart) instructions.
+
+* [Vagrant Download](https://www.vagrantup.com/downloads.html) (tested on version 1.8.1)
+* [VirtualBox Download](https://www.virtualbox.org/wiki/Downloads) (tested on version 5.0.14 for OS X hosts, amd64; _not_ the extension pack)
+
+
 ## Quickstart
 By default, this will launch a Virtualbox VM running Ubuntu 14.04 LTS (a "docker host VM") and will run docker 
 images within this VM.  Additionally, this VM will expose ports on your local machine (e.g. for viewing with a web 
@@ -224,11 +233,3 @@ To enable this, un-comment the following section of `DockerHostVagrantfile`
 your firewall settings to allow NFS or SMB traffic to reach the docker host VM, which is available at the default address
 of `10.11.8.11`.
 
-
-## MacOS users
-
-After downloading and installing Vagrant and Virtualbox, you should be able to continue with the [Quickstart](#quickstart)
-
-* [Download](https://www.vagrantup.com/downloads.html) and install Vagrant (tested on version 1.8.1)
-* [Download](https://www.virtualbox.org/wiki/Downloads) and install VirtualBox (tested on version 5.0.14 for OS X hosts, amd64; _not_ the extension pack)
-* Continue the installation by following the [Quickstart](#quickstart)
