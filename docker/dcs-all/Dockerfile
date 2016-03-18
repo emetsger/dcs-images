@@ -23,7 +23,7 @@ ENV JETTY_HOME=${APPS}/jetty \
 # Create simplified startup script
 RUN export JETTY_VERSION=9.3.7.v20160115 && \
     mkdir -p ${APPS} && \
-    curl -L http://download.eclipse.org/jetty/stable-9/dist/jetty-distribution-${JETTY_VERSION}.tar.gz | tar xzf - -C ${APPS} && \
+    curl -L http://download.eclipse.org/jetty/${JETTY_VERSION}/dist/jetty-distribution-${JETTY_VERSION}.tar.gz | tar xzf - -C ${APPS} && \
     ln -s ${APPS}/jetty-distribution-${JETTY_VERSION} ${JETTY_HOME} && \
     echo "--module=logging" >> ${JETTY_HOME}/start.ini && \
     printf "#!/bin/sh\nmkdir -p ${JETTY_SHARED}/logs\njava -Djetty.home=${JETTY_HOME} -Djetty.base=${JETTY_HOME} -Djetty.logging.dir=${JETTY_SHARED}/logs -jar ${JETTY_HOME}/start.jar" \
