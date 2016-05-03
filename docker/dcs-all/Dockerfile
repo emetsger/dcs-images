@@ -51,7 +51,7 @@ ENV KARAF_HOME=${APPS}/apache-karaf  \
 # Change permissions so Karaf can be run by any unprivileged user
 RUN export KARAF_VERSION=4.0.4 && \
     mkdir -p ${APPS} && \
-    curl -L http://apache.mirrors.lucidnetworks.net/karaf/${KARAF_VERSION}/apache-karaf-${KARAF_VERSION}.tar.gz | tar xzf - -C ${APPS} && \
+    curl -L https://archive.apache.org/dist/karaf/${KARAF_VERSION}/apache-karaf-${KARAF_VERSION}.tar.gz | tar xzf - -C ${APPS} && \
     ln -s ${APPS}/apache-karaf-${KARAF_VERSION} ${KARAF_HOME} && \ 
     cat ${KARAF_HOME}/etc/org.ops4j.pax.url.mvn.cfg \
         | sed 's/org.ops4j.pax.url.mvn.repositories=/org.ops4j.pax.url.mvn.repositories = http:\/\/maven.dataconservancy.org\/public\/releases@id=dc.public.releases,http:\/\/maven.dataconservancy.org\/public\/snapshots@id=dc.public.snapshots@snapshots@noreleases,/' \
