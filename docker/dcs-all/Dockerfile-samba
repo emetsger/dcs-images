@@ -7,24 +7,20 @@ ENV SHARED /shared
 RUN apk update   && \
   apk add openrc && \
   apk add samba  && \
-  apk add samba-common-tools
+  apk add samba-common-tools && \
+  apk add gettext
 
 RUN apk upgrade samba-4.4.3 \
           --allow-untrusted \
           --update-cache    \
           --repository http://dl-3.alpinelinux.org/alpine/edge/main/ 
 
-RUN rc-update add samba
-
-ADD smb.conf /etc/samba
-
-RUN mkdir ${SHARED}
-
-RUN chown nobody:nobody ${SHARED}
-
-RUN chmod 4775 ${SHARED}
-
 VOLUME ${SHARED}
+
+RUN chown nobody:nobody ${SHARED} && \
+    chmod 4775 ${SHARED}
+
+ADD smb.conf ${SHARED}/etc/samba/smb.conf.tmpl
 
 EXPOSE 137 138 139 445
 
