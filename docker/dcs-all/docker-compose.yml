@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+
+  samba:
+
+    build: 
+      context: .
+      dockerfile: "Dockerfile-samba"
+
+    volumes:
+     - /shared
+
+    ports:
+     - "137:137"
+     - "138:138"
+     - "139:139"
+     - "445:445"
+
+  pis:
+
+    image: dataconservancy/dcs-all  
+  
+    entrypoint: /usr/bin/launch.sh
+
+    volumes_from:
+     - samba
+   
+    expose: 
+     - "8080"
+     - "8181"
+  
+    ports: 
+     - "8080:8080"
+     - "8181:8181"

@@ -1,0 +1,35 @@
+FROM alpine:3.3
+
+MAINTAINER Data Conservancy <dc-ird@googlegroups.com>
+
+ENV SHARED /shared
+
+RUN apk update   && \
+  apk add openrc && \
+  apk add samba  && \
+  apk add samba-common-tools
+
+RUN apk upgrade samba-4.4.3 \
+          --allow-untrusted \
+          --update-cache    \
+          --repository http://dl-3.alpinelinux.org/alpine/edge/main/ 
+
+RUN rc-update add samba
+
+ADD smb.conf /etc/samba
+
+RUN mkdir ${SHARED}
+
+RUN chown nobody:nobody ${SHARED}
+
+RUN chmod 4775 ${SHARED}
+
+VOLUME ${SHARED}
+
+EXPOSE 137 138 139 445
+
+ADD samba-entrypoint.sh /
+
+RUN chmod 700 /samba-entrypoint.sh
+
+ENTRYPOINT [ "/samba-entrypoint.sh" ]
